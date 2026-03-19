@@ -5,9 +5,12 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 
-if (args.length === 0) {
-    console.log('Usage: node noder <command>');
-    process.exit(1);
+if (args.length === 0 || args[0] === 'list') {
+    console.log('Available commands:');
+    console.log('  list                   Show all available commands');
+    console.log('  make:controller        Create a new controller file');
+    console.log('  make:middleware        Create a new middleware file');
+    process.exit(0);
 }
 
 const parts = args[0].split(':');
