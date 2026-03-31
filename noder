@@ -9,6 +9,16 @@ const configPath = path.join(process.cwd(), '.noder', 'config.js');
 const noderConfig = fs.existsSync(configPath) ? require(configPath) : {};
 const directoryNames = noderConfig.directoryNames ?? {};
 
+function getValidNames(names) {
+    const cleaned = names.map(name => name.trim()).filter(Boolean);
+
+    if (cleaned.length < names.length) {
+        console.log('[WARN] Skipped empty name(s).');
+    }
+
+    return cleaned;
+}
+
 if (args.length === 0 || args[0] === 'list' || args[0] === 'ls') {
     console.log('Available commands:');
     console.log('  list                   Show all available commands');
@@ -77,7 +87,12 @@ switch(command) {
             process.exit(1);
         }
 
-        const names = args.slice(1);
+        const names = getValidNames(args.slice(1));
+
+        if (names.length === 0) {
+            console.log('At least one name is required.');
+            process.exit(1);
+        }
 
         if (!config.dir || config.dir === '') {
             console.log('Noder config error.');
